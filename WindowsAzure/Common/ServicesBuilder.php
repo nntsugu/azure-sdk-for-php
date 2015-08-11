@@ -73,11 +73,23 @@ class ServicesBuilder
     /**
      * Gets the HTTP client used in the REST services construction.
      *
+     * @param string $certificatePath          The certificate path.
+     * @param string $certificateAuthorityPath The path of the certificate authority.
+     * @param string $proxyConfiguration       The proxy configuration given as URL, e.g. 'socks5://localhost:1080', 'http://proxyhost:1080'.
+     *
      * @return WindowsAzure\Common\Internal\Http\IHttpClient
      */
-    protected function httpClient()
+    protected function httpClient(
+        $certificatePath = Resources::EMPTY_STRING,
+        $certificateAuthorityPath = Resources::EMPTY_STRING,
+        $proxyConfiguration = Resources::EMPTY_STRING        
+    )
     {
-        return new HttpClient();
+        return new HttpClient(
+            $certificatePath,
+            $certificateAuthorityPath,
+            $proxyConfiguration
+        );
     }
 
     /**
@@ -220,17 +232,22 @@ class ServicesBuilder
     /**
      * Builds a blob object.
      *
-     * @param string $connectionString The configuration connection string.
+     * @param string $connectionString         The configuration connection string.
+     * @param string $proxyConfiguration       The proxy configuration given as URL, e.g. 'socks5://localhost:1080', 'http://proxyhost:1080'.
      *
      * @return WindowsAzure\Blob\Internal\IBlob
      */
-    public function createBlobService($connectionString)
+    public function createBlobService($connectionString, $proxyConfiguration = Resources::EMPTY_STRING)
     {
         $settings = StorageServiceSettings::createFromConnectionString(
             $connectionString
         );
 
-        $httpClient = $this->httpClient();
+        $httpClient = $this->httpClient(
+            Resources::EMPTY_STRING,
+            Resources::EMPTY_STRING,
+            $proxyConfiguration
+        );
         $serializer = $this->serializer();
         $uri        = Utilities::tryAddUrlScheme(
             $settings->getBlobEndpointUri()

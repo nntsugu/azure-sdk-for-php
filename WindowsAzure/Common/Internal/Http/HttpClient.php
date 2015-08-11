@@ -74,12 +74,14 @@ class HttpClient implements IHttpClient
      * 
      * @param string $certificatePath          The certificate path.
      * @param string $certificateAuthorityPath The path of the certificate authority.
+     * @param string $proxyConfiguration       The proxy configuration given as URL, e.g. 'socks5://localhost:1080', 'http://proxyhost:1080'.
      * 
      * @return WindowsAzure\Common\Internal\Http\HttpClient
      */
     function __construct(
         $certificatePath = Resources::EMPTY_STRING,
-        $certificateAuthorityPath = Resources::EMPTY_STRING
+        $certificateAuthorityPath = Resources::EMPTY_STRING,
+        $proxyConfiguration = Resources::EMPTY_STRING
     ) {
         $config = array(
             Resources::USE_BRACKETS    => true,
@@ -95,6 +97,11 @@ class HttpClient implements IHttpClient
         if (!empty($certificateAuthorityPath)) {
             $config[Resources::SSL_CAFILE]      = $certificateAuthorityPath;
             $config[Resources::SSL_VERIFY_PEER] = true;
+        }
+        
+        if (!empty($proxyConfiguration)) {
+            $config[Resources::PROXY]      = $proxyConfiguration;
+            $config[Resources::ADAPTER]    = 'curl';
         }
 
         $this->_request = new \HTTP_Request2(

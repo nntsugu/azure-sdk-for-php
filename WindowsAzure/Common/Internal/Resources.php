@@ -444,6 +444,8 @@ class Resources
     const SSL_LOCAL_CERT  = 'ssl_local_cert';
     const SSL_CAFILE      = 'ssl_cafile';
     const CONNECT_TIMEOUT = 'connect_timeout';
+    const PROXY           = 'proxy';
+    const ADAPTER         = 'adapter';
 
     // Media services
     const MEDIA_SERVICES_URL = 'https://media.windows.net/API/';

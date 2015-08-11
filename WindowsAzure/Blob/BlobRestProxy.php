@@ -93,7 +93,7 @@ class BlobRestProxy extends ServiceRestProxy implements IBlob
      * @var int Defaults to 32MB
      */
     private $_SingleBlobUploadThresholdInBytes = 33554432 ;
-
+    
     /**
      * Get the value for SingleBlobUploadThresholdInBytes
      *
